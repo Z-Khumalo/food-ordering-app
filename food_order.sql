@@ -80,6 +80,18 @@
 --VALUES (20,'Peppermint Bark Milkshake','23.00','Milkshakes');
 --INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
 --VALUES (21,'Chocolate Peanut Butter Banana Shake.','26.00','Milkshakes');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (23,'Chicken breast','100.00','Chicken_meat');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (24,'Chicken drumsticks','90.00','Chicken_meat');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (25,'Pork Steak','120.00','Pork_meat');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (26,'Pork Ribs','150.00','Pork_meat');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (27,'Pork Tenderloin','190.00','Pork_meat');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (28,'Pork Shoulder','250.00','Pork_meat');
 
 
 
