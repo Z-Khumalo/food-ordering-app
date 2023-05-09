@@ -1,11 +1,27 @@
-#sample dataframe  # nolint
-menu <- data.frame(Item = c("Burger", "Pizza", "Fries", "Soda"), Price = c(10, 15, 5, 2)) # nolint
+# library(DBI)
+# library(RPostgresSQL)
+# source("con.R")
+
+# #sample dataframe  # nolint
+# menu <- data.frame(Item = c("Burger", "Pizza", "Fries", "Soda"), Price = c(10, 15, 5, 2)) # nolint
+
+
+# query <- "SELECT * FROM Menu"
+# result <- dbGetQuery(con, query)
+
+# # Close the database connection
+# dbDisconnect(con)
+
+# Print the list of items
+# print(result$Item_name)
+
+
 
 #function to process new orders
 process_order <- function() { # nolint
 
   # Initialize empty order list
-  order_list <- list()
+  order_list <- list(result)
    # nolint
     cat("Food Menu:\n")
     print(menu)
@@ -22,7 +38,7 @@ process_order <- function() { # nolint
       # Print the order summary and prompt the user to confirm the order
       cat("Order summary:\n")
       for (i in seq_along(order_list)) {
-        cat(paste0(order_list[[i]]$quantity, "x ", order_list[[i]]$item, ": R", order_list[[i]]$price, "\n"))   # nolint
+        cat(paste0(order_list[[i]]$quantity, "x ", order_list[[i]]$Item_name, ": R", order_list[[i]]$Item_price,"\n"))   # nolint
       }
       confirm <- readline(prompt = "Confirm your order? (y/n): ")
       if (confirm == "y") {
@@ -39,12 +55,12 @@ process_order <- function() { # nolint
     }
     # nolint
     # Find the selected item in the menu and calculate the total price
-    item_info <- menu[menu$Item == item, ]
+    item_info <- Menu[Menu$Item_name == item, ]
     if (nrow(item_info) == 0) {
       cat("Invalid item. Please select an item from the menu.\n")
       next
     }
-    price <- item_info$Price * quantity
+    price <- item_info$Item_price * quantity
      # nolint
      # nolint
     # Add the selected item to the order list
@@ -57,7 +73,7 @@ process_order <- function() { # nolint
       # Print the order summary and prompt the user to confirm the order
       cat("Order summary:\n")
       for (i in seq_along(order_list)) {
-        cat(paste0(order_list[[i]]$quantity, "x ", order_list[[i]]$item, ": R", order_list[[i]]$price, "\n"))  # nolint
+        cat(paste0(order_list[[i]]$quantity, "x ", order_list[[i]]$Item_name, ": R", order_list[[i]]$Item_price, "\n"))  # nolint
       }
       confirm <- readline(prompt = "Proceed to checkout? (y/n): ")
       if (confirm == "y") {
