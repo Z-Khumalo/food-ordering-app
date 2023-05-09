@@ -80,18 +80,67 @@
 --VALUES (20,'Peppermint Bark Milkshake','23.00','Milkshakes');
 --INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
 --VALUES (21,'Chocolate Peanut Butter Banana Shake.','26.00','Milkshakes');
+--INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+--VALUES (23,'Chicken breast','100.00','Chicken_meat');
+--INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+--VALUES (24,'Chicken drumsticks','90.00','Chicken_meat');
+--INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+--VALUES (25,'Pork Steak','120.00','Pork_meat');
+--INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+--VALUES (26,'Pork Ribs','150.00','Pork_meat');
+--INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+--VALUES (27,'Pork Tenderloin','190.00','Pork_meat');
+--INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+--VALUES (28,'Pork Shoulder','250.00','Pork_meat');
+--INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+--VALUES (28,'Pork Shoulder','250.00','Pork_meat');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
-VALUES (23,'Chicken breast','100.00','Chicken_meat');
+VALUES (29,'Fish and chips','110.00','Meals');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
-VALUES (24,'Chicken drumsticks','90.00','Chicken_meat');
+VALUES (30,'chicken and chips','130.00','Meals');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
-VALUES (25,'Pork Steak','120.00','Pork_meat');
+VALUES (31,'Pap and chicken','45.00','Meals');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
-VALUES (26,'Pork Ribs','150.00','Pork_meat');
+VALUES (32,'Pap and Beef','50.00','Meals');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
-VALUES (27,'Pork Tenderloin','190.00','Pork_meat');
+VALUES (33,'Pap and cow heels','60.00','Meals');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
-VALUES (28,'Pork Shoulder','250.00','Pork_meat');
+VALUES (34,'Pap and mogodu','65.00','Meals');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (35,'Chips and Ribs','115.00','Meals');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (36,'Rice and chicken','55.00','Meals');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (37,'Rice and beef','40.00','Meals');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (38,'Rice and fried chicken','65.00','Meals');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (39,'Caribbean cow heel soup','10.00','Soup');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (40,'Spiced carrot & lentil soup','15.00','Soup');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (41,'Pumpkin soup ','14.00','Soup');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (42,'Jewish chicken soup ','17.00','Soup');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (43,'Miso & butternut soup','16.00','Soup');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (44,'Creamy cauliflower soup','18.00','Soup');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (45,'Mushroom soup','19.00','Soup');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (46,'sprite','19.00','Drinks');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (47,'Fanta Orange','19.00','Drinks');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (48,'Fanta grape','19.00','Drinks');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (49,'Juice','19.00','Drinks');
+INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
+VALUES (50,'Water','10.00','Drinks');
+
+
+
 
 
 
@@ -105,6 +154,7 @@ VALUES (28,'Pork Shoulder','250.00','Pork_meat');
 --VALUES (1041,'Zweli','12346');
 --INSERT INTO Administrator(Admin_id ,Admin_user_name ,Admin_password)
 --VALUES (1022,'Ntsako','12348');
+
 
 SELECT * from Menu;
 --SELECT * from Administrator;
