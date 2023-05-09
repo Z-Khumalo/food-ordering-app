@@ -6,11 +6,11 @@
 # menu <- data.frame(Item = c("Burger", "Pizza", "Fries", "Soda"), Price = c(10, 15, 5, 2)) # nolint
 
 
-# query <- "SELECT * FROM Menu"
-# result <- dbGetQuery(con, query)
+ query <- "SELECT DISCTINCT * FROM Menu"
+result <- dbGetQuery(con, query)
 
 # # Close the database connection
-# dbDisconnect(con)
+dbDisconnect(con)
 
 # Print the list of items
 # print(result$Item_name)
@@ -21,7 +21,7 @@
 process_order <- function() { # nolint
 
   # Initialize empty order list
-  order_list <- list(result)
+  order_list <- list()
    # nolint
     cat("Food Menu:\n")
     print(menu)
