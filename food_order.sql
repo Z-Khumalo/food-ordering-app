@@ -26,7 +26,7 @@
 
 --CREATE TABLE Orders
 --(Order_id INT PRIMARY KEY, 
---Order_quantity VARCHAR(50) NOT NULL,
+--Order_quantity NOT NULL,
 --Order_date VARCHAR(50) NOT NULL,
 --Order_total VARCHAR(50) NOT NULL,
 --Item_id INT NOT NULL,
