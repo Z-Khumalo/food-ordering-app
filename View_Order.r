@@ -7,7 +7,7 @@ get_order_info <- function(order_id){
   #conn <- odbcDriverConnect(conn)
   
   # Construct SQL query to retrieve order information
-  sql <- paste("SELECT Orders.Order_id, Orders.Order_date, Orders.Order_quantity, Menu.Item_id, Menu.item_name, COUNT(Menu.Item_price) AS total_sales
+  sql <- paste("SELECT Orders.Order_id, Orders.Order_date, Menu.item_name, Orders.Order_quantity, SUM(Menu.Item_price) AS total_sales
                 FROM Orders
                 INNER JOIN Menu ON Orders.Item_id = Menu.Item_id
                 GROUP BY Orders.Order_id, Orders.Order_date, Orders.Order_quantity, Menu.Item_id, Menu.item_name")
