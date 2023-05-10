@@ -1,4 +1,4 @@
- --DROP DATABASE IF EXISTS FOOD_ORDERING_DB
+ --DROP DATABASE IF EXISTS FOOD_ORDERING_DB;
 
 
 --CREATE DATABASE FOOD_ORDERING_DB;
@@ -26,8 +26,8 @@
 
 --CREATE TABLE Orders
 --(Order_id INT PRIMARY KEY, 
---Order_quantity NOT NULL,
---Order_date VARCHAR(50) NOT NULL,
+--Order_quantity INT NOT NULL,
+--Order_date DATE,
 --Order_total VARCHAR(50) NOT NULL,
 --Item_id INT NOT NULL,
 --Admin_id INT  NOT NULL,
