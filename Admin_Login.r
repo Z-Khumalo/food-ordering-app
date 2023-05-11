@@ -5,9 +5,6 @@ library(RPostgreSQL)
 source("con.R")
 
 
-# Set up database connection
-#con <- dbConnect(RPostgreSQL::PostgreSQL(), dbname = "mydatabase", host = "localhost", user = "myuser", password = "mypassword")
-
 # Prompt user for login credentials
 username <- readline("Enter your username: ")
 password <- readline("Enter your password: ")
@@ -25,8 +22,6 @@ if (nrow(res) == 1) {
   print("Invalid username or password.")
 }
 
-# Close database connection
-#dbDisconnect(con)
 
 
 
