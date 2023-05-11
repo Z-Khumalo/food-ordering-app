@@ -25,7 +25,7 @@
 --);
 
 --CREATE TABLE Orders
---(Order_id INT PRIMARY KEY, 
+--(Order_id serial INT PRIMARY KEY, 
 --Order_quantity INT NOT NULL,
 --Order_date DATE,
 --Order_total VARCHAR(50) NOT NULL,
