@@ -34,8 +34,11 @@ This project is currently in development and is not yet ready for production use
 ## Room for improvement
 
 ##Acknowledgement
+
 Phosa Malebo
+
 Mokoena Sibingile
+
 Khumalo Zweli
 Chabangu Ntsako
 Mdiniso Zandile
