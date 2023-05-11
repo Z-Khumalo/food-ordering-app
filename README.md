@@ -37,6 +37,14 @@ Install the required R packages using the install.packages() function.
 Connect the system to a PostgreSQL database.
 
 ## Usage
+Admin logs into the system
+
+Place an order by selecting the desired items and providing your contact information.
+
+Check the order status by navigating to the "Order Status" page.
+
+Update the order status by logging in to the admin interface and selecting the appropriate status from the dropdown menu.
+
 
 ## Project status
 This project is currently in development and is not yet ready for production use.
