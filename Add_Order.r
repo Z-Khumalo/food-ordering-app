@@ -1,7 +1,4 @@
-Zandile Mdiniso
-#4132
 
-phosa malebo — Yesterday at 4:06 PM
 library(DBI)
 library(RPostgres)
 source("con.R")
