@@ -3,7 +3,8 @@ library(RPostgres)
 
 conn <- dbConnect(
 Postgres(), 
-user <- '', 
+port = '5432',
+user = 'postgres', 
 password ='', 
-dbname <- '', 
+dbname <- 'postgres', 
 host <- 'localhost')
