@@ -2,30 +2,57 @@
 library(DBI)
 library(RPostgreSQL)
 source("con.R")
-
+source("Admin_Login.r")
 
 
 # Function to display menu items
 displayMenu <- function() {
   query <- "SELECT Item_id, Item_name, Item_price FROM Menu"
   menu_items <- dbGetQuery(con, query)
-  cat("Food Menu:\n")
-  print(menu_items)
-}
+    cat(sprintf("%-10s%-30s%-10s\n", "Item ID", "Item Name", "Price"))
+
+    cat("Food Menu:\n")
+    print(menu_items)
+    }
+
+
+
 
 # Function to process the order
 processOrder <- function(admin_id) {
+
+# get the highest order_id from the Orders table
+  query_max_order_id <- paste("SELECT MAX(Order_id) FROM Final_Orders")
+  max_order_id <- dbGetQuery(con, query_max_order_id)[1,1]
+  
+  # if Orders table is empty, set max_order_id to 0
+  if(is.na(max_order_id)) {
+    max_order_id <- 0
+  }
+  
+  # generate new order_id by incrementing the max_order_id
+  order_id <- max_order_id + 1
+  
+  # initialize order_total and order_quantity to 0
+  order_total <- 0
+  order_quantity <- 0
+  
+  # initialize empty list to store order items
+#   order_items <- list()
+
   # Display the menu
   displayMenu()
 
     order_data <- data.frame(Order_id = integer(),
-                             Item_id = integer(),
-                            Item_name = character(), 
-                            Order_quantity = integer(),                  
+                            Order_quantity = integer(),
                             Order_date = character(),
                             Order_total = character(),
-
-                            # Admin_id = integer(),
+                             Item_id = integer(),
+                            
+                            Admin_id = integer(),                
+                            Item_name = character(), 
+                            
+                            
                             stringsAsFactors = FALSE)
 
   
@@ -46,11 +73,12 @@ processOrder <- function(admin_id) {
       next
     }
     
-    item_id <- as.integer(item_id)
+    item_exists <- as.integer(item_id)
     
     # Check if the item ID exists in the menu
     query <- paste0("SELECT Item_id, Item_name, Item_price FROM Menu WHERE Item_id = ", item_id)
-   item_exists <- dbGetQuery(con,query)
+     item_exists <- dbGetQuery(con,query)
+  
     
  
         if (nrow(item_exists) ==0) { 
@@ -64,45 +92,76 @@ processOrder <- function(admin_id) {
       next
     }
 
+       get_admin <- paste0("SELECT Admin_id FROM Administrator WHERE Admin_user_name='", creds$username, "'")
+        admin_id <- dbGetQuery(con,get_admin)$Admin_id 
+
+    # add item and quantity to order_items
+    # item_name <- menu$Item_name[menu$Item_id == as.integer(item_id)]
+    # item_price <- menu$Item_price[menu$Item_id == as.integer(item_id)]
+    # order_items[[length(order_items) + 1]] <- list(item_id = item_id, item_name = item_name, quantity = as.integer(quantity), price = item_price)
     
     # Get the current date and time
     order_date <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
     
     # Calculate the total price for the item
         get_price_query <- paste0("SELECT Item_price, Item_name FROM Menu WHERE Item_id=", item_id)
-        item_price <- dbGetQuery(con,get_price_query)$item_price
-        item_name <- dbGetQuery(con,get_price_query)$item_name
+
+
+        item_price_result <- dbGetQuery(con,get_price_query)
+        if (nrow(item_price_result) == 0) {
+            cat("Error: Item ID not found in menu.\n")
+        next
+            }
+        item_price <- item_price_result$item_price[1]
+        item_name <- item_price_result$item_name[1]
         total_price <- item_price * quantity
+        # Grand_total <- Grand_total + total_price
+    
+     
+        # order_items[[length(order_items) + 1]] <- list(item_id = item_id, item_name = item_name, quantity = as.integer(quantity), price = item_price,Grand_total)
+
     
     # Add the item to the order data frame
-        order_data <- rbind(order_data, data.frame(Order_Id = NA,
-                            Order_quantity = as.character(quantity),
-                            Order_total = as.character(total_price),
+        order_data <- rbind(order_data, data.frame(order_id,
+                            Order_quantity = as.integer(quantity),
+                            Item_total = as.character(total_price),
                             Order_date = as.character(order_date),
                              Item_id = as.integer(item_id),
-                             admin_id = NA,
+                             Admin_id = NA,
                              Item_name = as.character((item_name)
                              )))
 
     
-                # Prompt the user to add another item
+    # Prompt the user to add another item2
+
     add_another <- readline(prompt = "Do you want to add another item to your order? (Y/N): ")
     if (tolower(add_another) != "y") {
       break
     }
 
   }
-    # Print the order data
+
+
+# getAdmin_id <- function(){
+#         get_admin <- paste0("SELECT Admin_id FROM Administrator WHERE Admin_user_name=", creds$username)
+#         admin_id <- dbGetQuery(con,get_admin)$Admin_id
+
+#         return(admin_id)
+#     }
+#     # Print the order data
     cat("THANK YOU FOR YOUR ORDER!\n Order summary:\n")
-     print(order_data)
+    cat(sprintf("Order ID: %d\n", order_id))
+    print(order_data)
+    # cat(sprintf("GRAND TOTAL: %d\n", Grand_total))
+  
     
-   dbWriteTable(con, "Final_Orders", order_data, append = TRUE, row.names = FALSE)
+#    dbWriteTable(con, "Final_Orders", order_data, append = TRUE, row.names = FALSE)
 
 }
 
 
   # Save the order data to the database
   
-     print(processOrder())
+print(processOrder())
 
      ##process needs to take the user back the main menu after order has been processed
