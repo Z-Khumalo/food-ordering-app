@@ -34,9 +34,10 @@ Admin_id INT  NOT NULL,
 CONSTRAINT Item_id FOREIGN KEY(Item_id) REFERENCES Menu(Item_id),
 CONSTRAINT Admin_id FOREIGN KEY (Admin_id) REFERENCES Administrator (Admin_id)
 );
-DROP TABLE Menu;
-DROP TABLE Administrator;
-DROP TABLE Orders;
+
+CREATE TABLE Final_Orders AS
+SELECT a.Order_id, a.Order_quantity,a.Order_date,a.Order_total,a.Item_id,a.Admin_id,b.Item_Name 
+FROM Orders a inner join Menu b on a.Item_id = b.Item_id;
 
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
 VALUES (1,'Twist','50.00','Burgers');
