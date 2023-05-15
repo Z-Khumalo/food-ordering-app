@@ -23,6 +23,7 @@ df = dbSendQuery(conn, query)
 df = dbFetch(df)
 menu_items = as.list(df$id)
 
+
 #Function to make order from order table
 make_order <- function(){
     ITEMS = readline()
@@ -40,4 +41,19 @@ fetch_orders <- function() {
     df = dbFetch(df)
     order_d = rbind(order_d, df)
     print(order_d)
+}
+
+#confirm order
+confirm_order <- function(){
+    order_c = readline(prompt= '1 add orders   3 Remove items: ')
+
+    if (order_c == '1'){
+        make_order()
+    } else if (order_c == '3') {
+       item_to_rem = as.integer(readline(prompt='Remove:'))
+       order_d = order_d[-c(item_to_rem)]
+       print(order_d)
+    } else {
+    print('Thanks for shopping')
+}
 }
