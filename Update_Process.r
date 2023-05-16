@@ -6,8 +6,6 @@ source('con.R')
 
 
 #Order data frames
-order_tbl1 = data.frame(id = c(), title = c(), price = c())
-
 order_tbl <- data.frame(Qnty = c(), order_date <- c(), total <- c())
 
 
@@ -30,11 +28,15 @@ make_order <- function(){
 
 #Function to fetch items from database
 fetch_orders <- function() {
-    query = paste("SELECT id, title, price FROM table87 WHERE id =", ITEMS)
-    df = dbSendQuery(conn, query)
-    df = dbFetch(df)
-    order_tbl1 = rbind(order_tbl1, df)
-    print(order_tbl1)
+    order_tbl1 <-  data.frame(id = c(), title = c(), price = c())
+    query <- paste("SELECT id, title, price FROM table87 WHERE id =", ITEMS)
+    df <- dbSendQuery(conn, query)
+    df <- dbFetch(df)
+    order_tbl1 <-  rbind(order_tbl1, df)
+    order_tbl <<- rbind(order_tbl1)
+    print(order_tbl)
+
+    confirm_order()
 }
 
 #confirm order
@@ -45,12 +47,11 @@ confirm_order <- function(){
         make_order()
     } else if (order_c == '3') {
        item_to_rem = as.integer(readline(prompt='Remove:'))
-       order_tbl1 = order_tbl1[-c(item_to_rem)]
-       print(order_tbl1)
+       order_tbl = order_tbl[-c(item_to_rem)]
+       print(order_tbl)
     } else {
     print('Thanks for shopping')
 }
 }
 
 make_order()
-confirm_order()
