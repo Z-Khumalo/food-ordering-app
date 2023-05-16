@@ -17,7 +17,8 @@ This is a food ordering system that allows customers to place orders for food it
 
 R programming language
 
-R packages:RPostgres, 
+R packages:RPostgres
+ERD using lucidchart
 
 ## Features
 
@@ -55,7 +56,7 @@ This project is currently in development and is not yet ready for production use
 
 Phosa Malebo
 
-Mokoena Sibingile
+Mokoena Sibongile
 
 Khumalo Zweli
 
