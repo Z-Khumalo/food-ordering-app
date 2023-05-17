@@ -19,7 +19,7 @@ R programming language
 
 R packages:RPostgres 
 
-lucidchart
+Lucidchart
 
 SQL
 
