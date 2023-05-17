@@ -1,6 +1,7 @@
 # Load the required packages
 library(DBI)
 library(RPostgreSQL)
+source("con.R")
 source("Admin_Login.r")
 
 
@@ -79,7 +80,8 @@ processOrder <- function(admin_id) {
                            Order_date = character(),
                            Order_total = character(),
                            Item_id = integer(),
-                           Admin_id = integer(),                
+                           Selling_price  = integer(),
+                           Admin_name = character(),               
                            Item_name = character(), 
                            stringsAsFactors = FALSE)
   
@@ -120,7 +122,8 @@ processOrder <- function(admin_id) {
       next
     }
     
-    admin_id <- creds$username
+    admin_name <- creds$username
+  
     
     # Get the current date and time
     order_date <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
@@ -145,13 +148,19 @@ processOrder <- function(admin_id) {
                                                Item_total = as.character(total_price),
                                                Order_date = as.character(order_date),
                                                Item_id = as.integer(item_id),
-                                               Admin_id = admin_id,
+                                                Selling_price = item_price,
+                                               Admin_name = admin_name,
                                                Item_name = as.character((item_name)
                                                )))
     
   
-      sql <- paste0("INSERT INTO Orders (Order_id, Item_id, Item_name, Item_price, Item_quantity, Item_total, Order_date, Order_quantity) VALUES ('",order_data$SQ_OrderID.nextval, "', '", order_data$Item_id, "', '", order_data$Item_name, "', ", order_data$Item_price, ", ", order_data$Item_quantity, ", ", order_data$Item_total, ", '", order_data$Order_date, "', '", order_data$Order_quantity, "')")
-    
+sql <- paste0("INSERT INTO Orders (Order_id, Order_quantity, Order_date, Item_total,Item_id, Item_name,Selling_price,Admin_user_name ) VALUES ('",order_data$order_id, "', '", order_data$Order_quantity, "', '",order_data$Order_date, "', '",order_data$Item_total, "', '",order_data$Item_id, "',' ",order_data$Item_name, "',' ",order_data$Selling_price, "',' " ,order_data$Admin_name, "')")    
+      
+dbGetQuery(con,sql)
+      
+      
+      # Commit the changes
+      dbCommit(con)
     add_another <- readline(prompt = "Do you want to add another item to your order? (Y/N): ")
     if (tolower(add_another) != "y") {
       
@@ -166,7 +175,7 @@ processOrder <- function(admin_id) {
   cat("THANK YOU FOR YOUR ORDER!\n Order summary:\n")
   cat(sprintf("Order ID: %d\n", order_id))
   print(order_data)
-  dbWriteTable(con, "Orders", order_data, append = TRUE, row.names = FALSE)
+  # dbWriteTable(con, "Orders", order_data, append = TRUE, row.names = False)
   
   #back to mainmenu
   
