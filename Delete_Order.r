@@ -1,5 +1,4 @@
 
-
 #Load necessary packages
 library(DBI)
 library(RPostgreSQL)
@@ -7,23 +6,15 @@ source("con.R")
 
 # Function to delete orders
 delete_orders <- function() {
-  order_id <- readline("Enter the order ID to delete: ")
+order_id_to_delete <- readline(prompt = "Enter the Order_id to delete: ")
 
-  return(list(order_id = order_id))
-}
-# Loop 
-while (TRUE) {
-  # Prompt admin for order ID to delete
-  orderss <- delete_orders()
+# Construct the DELETE statement
+delete_query <- paste0("DELETE FROM Orders WHERE Order_id = '", order_id_to_delete, "'")
 
-  # Define the DELETE query
-  delete_query <- paste("DELETE FROM orders WHERE order_id = ", orderss$order_id)
-
-  # Execute the DELETE query
-  result <- dbExecute(con, delete_query)
-
+# Execute the DELETE statement
+dbExecute(con, delete_query)
   # Check if any rows were affected
-  if (result == 1) {
+  if (delete_query >= 1) {
     # Successful delete, print message
     print("Order deleted successfully.")
     break
@@ -35,3 +26,4 @@ while (TRUE) {
     }
   }
 }
+print(delete_orders())
