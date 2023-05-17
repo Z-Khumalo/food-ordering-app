@@ -1,13 +1,8 @@
- DROP DATABASE IF EXISTS FOOD_ORDERING_DB
-
-
-CREATE DATABASE FOOD_ORDERING_DB;
-
-
-
+-- DROP TABLE IF EXISTS Final_Orders;
+DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Menu;
 DROP TABLE IF EXISTS Administrator;
-DROP TABLE IF EXISTS Orders;
+
 
 
 CREATE TABLE Menu
@@ -24,26 +19,34 @@ Admin_password VARCHAR(50) NOT NULL,
 UNIQUE(Admin_user_name)
 );
 
+CREATE SEQUENCE SQ_OrderID
+START WITH 1
+INCREMENT BY 1
+NO CYCLE ;
+
 CREATE TABLE Orders
-(Order_id serial INT PRIMARY KEY, 
+(Order_id serial PRIMARY KEY NOT NULL, 
 Order_quantity INT NOT NULL,
 Order_date DATE,
-Order_total VARCHAR(50) NOT NULL,
+Item_total INT NOT NULL,
 Item_id INT NOT NULL,
+Item_name VARCHAR(50) NOT NULL,
 Admin_id INT  NOT NULL,
 CONSTRAINT Item_id FOREIGN KEY(Item_id) REFERENCES Menu(Item_id),
 CONSTRAINT Admin_id FOREIGN KEY (Admin_id) REFERENCES Administrator (Admin_id)
 );
-DROP TABLE Menu;
-DROP TABLE Administrator;
-DROP TABLE Orders;
+
+-- CREATE TABLE Final_Orders AS
+-- SELECT a.Order_id, a.Order_quantity,a.Order_date,a.Item_total,a.Item_id,a.Admin_id,b.Item_Name 
+-- FROM Orders a inner join Menu b on a.Item_id = b.Item_id;
+
 
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
 VALUES (1,'Twist','50.00','Burgers');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
 VALUES (2,'chicken_legs','20.00','Chicken_meat');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
-VALUES (3,'editerranean Pizza','200.00','Pizzas');
+VALUES (3,'Mediterranean Pizza','200.00','Pizzas');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
 VALUES (4,'McChicken Burger','50.00','Burgers');
 INSERT INTO Menu (Item_id ,Item_name,Item_price,Item_category)
@@ -153,3 +156,4 @@ VALUES (1022,'Ntsako','12348');
 
 SELECT * from Menu;
 SELECT * from Administrator;
+select * FROM final_orders;
