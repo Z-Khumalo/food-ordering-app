@@ -10,7 +10,8 @@ order_tbl <- data.frame(Qnty = c(), order_date <- c(), total <- c())
 
 
 #Fetch items from menu table
-query = ('SELECT id, title, price FROM table87')
+query = ('SELECT item_id, item_name, item_price, item_category 
+        FROM menu')
 df = dbSendQuery(conn, query)
 df = dbFetch(df)
 menu_items = as.list(df$id)
@@ -35,7 +36,9 @@ make_order <- function(){
 #Function to fetch items from database
 fetch_orders <- function() {
     order_tbl1 <-  data.frame(id = c(), title = c(), price = c())
-    query <- paste("SELECT id, title, price FROM table87 WHERE id =", ITEMS)
+    query <- paste("SELECT item_id, item_name, item_price, item_category 
+                    FROM menu 
+                    WHERE item_id =", ITEMS)
     df <- dbSendQuery(conn, query)
     df <- dbFetch(df)
     order_tbl1 <-  rbind(order_tbl1, df)
