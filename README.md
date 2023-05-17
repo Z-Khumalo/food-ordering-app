@@ -18,7 +18,10 @@ This is a food ordering system that allows customers to place orders for food it
 R programming language
 
 R packages:RPostgres 
-ERD using lucidchart
+
+lucidchart
+
+SQL
 
 ## Features
 
