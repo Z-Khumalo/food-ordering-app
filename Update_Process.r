@@ -18,6 +18,7 @@ menu_items = as.list(df$item_id)
 
 add_order = function(){
     if (nrow(order_tbl) > 0){
+        print(order_tbl)
         confirm_order()
     } else {
        make_order()
