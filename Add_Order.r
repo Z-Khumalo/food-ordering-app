@@ -33,13 +33,15 @@ processOrder <- function(admin_id) {
  
   
   order_data <- data.frame(order_id = integer(),
-                           Order_quantity = integer(),
-                           Order_date = character(),
-                           Order_total = character(),
-                           Item_id = integer(),
-                           Selling_price  = integer(),
-                           Admin_name = character(),               
-                           Item_name = character(), 
+                           order_quantity = integer(),
+                           order_date = character(),
+                           order_total = double(),
+                           item_id = integer(),
+                           item_price  = double(),
+                           item_category = character(),               
+                           item_name = character(), 
+                           admin_name = character(),
+
                            stringsAsFactors = FALSE)
   
   
@@ -80,13 +82,13 @@ processOrder <- function(admin_id) {
     }
     
     admin_name <- creds$username
-  
+ 
     
     # Get the current date and time
     order_date <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
     
     # Calculate the total price for the item
-    get_price_query <- paste0("SELECT Item_price, Item_name FROM Menu WHERE Item_id=", item_id)
+    get_price_query <- paste0("SELECT * FROM Menu WHERE Item_id=", item_id)
     
     
     item_price_result <- dbGetQuery(con,get_price_query)
@@ -97,25 +99,27 @@ processOrder <- function(admin_id) {
     item_price <- item_price_result$item_price[1]
     item_name <- item_price_result$item_name[1]
     total_price <- item_price * quantity
+    item_category <- item_price_result$item_category
     
     
     # Add the item to the order data frame
     order_data <- rbind(order_data, data.frame(order_id,
-                                               Order_quantity = as.integer(quantity),
-                                               Item_total = as.double(total_price),
-                                               Order_date = as.character(order_date),
-                                               Item_id = as.integer(item_id),
-                                                Selling_price = item_price,
-                                               Admin_name = admin_name,
-                                               Item_name = as.character((item_name)
-                                               )))
+                                               order_quantity = as.integer(quantity),
+                                               order_total = as.double(total_price),
+                                               order_date = as.character(order_date),
+                                               item_id = as.integer(item_id),
+                                               item_price = as.double(item_price),
+                                               item_category = as.character(item_category),
+                                               item_name = as.character(item_name),
+                                               admin_name = as.character(admin_name)
+                                               ))
     
   
 
       
       
       # Commit the changes
-      dbCommit(con)
+    dbCommit(con)
     add_another <- readline(prompt = "Do you want to add another item to your order? (Y/N): ")
     if (tolower(add_another) != "y") {
       
@@ -126,7 +130,7 @@ processOrder <- function(admin_id) {
   }
   
  # Specify the source column when using dbWriteTable()
-dbWriteTable(con, "orders", order_data, append = TRUE, row.names = FALSE, field.types = c(Source = "character"))
+dbWriteTable(con, "final_orders", order_data, append = TRUE, row.names = FALSE)
   #     # Print the order data
   cat("THANK YOU FOR YOUR ORDER!\n Order summary:\n")
   cat(sprintf("Order ID: %d\n", order_id))
