@@ -15,10 +15,11 @@ query = ('SELECT item_id, item_name, item_price, item_category
 df = dbSendQuery(conn, query)
 df = dbFetch(df)
 menu_items = as.list(df$item_id)
+print(df)
 
 add_order = function(){
     if (nrow(order_tbl) > 0){
-        print(order_tbl)
+        # print(order_tbl)
         confirm_order()
     } else {
        make_order()
@@ -28,7 +29,7 @@ add_order = function(){
 remove_item = function(){
     item_to_remove <- readline(prompt = "Remove: ")
     item_to_remove <- as.integer(item_to_remove)
-    order_tbl<- order_tbl[-c(item_to_remove),]
+    order_tbl <<- order_tbl[-c(item_to_remove), ]
     print(order_tbl)
 }
 
@@ -68,7 +69,17 @@ fetch_orders <- function() {
 
     confirm_order()
 }
+edit_order_items = function(item_id, orderN){
+    
+    item_id = readline(prompt = 'Enter item id: ')
+    orderN = readline(prompt =  "Enter order #: ")
 
+    query = paste("UPDATE orders 
+            SET item_id =", item_id, 
+            "WHERE order_number = ", orderN)
+
+    dbSendQuery(conn,query)
+}
 #confirm order
 confirm_order <- function(){
     order_c = readline(prompt= '\n 1 = Add order \n3 = Remove item  \nC = Cancel  \n4 = Proceded to checkout: ')
@@ -80,8 +91,6 @@ confirm_order <- function(){
         add_order()
     } else if (order_c == 'C') {
         delete_order()
-}   else if (order_c == '4') {
-    
 }  else {
     print('invalid option')
     add_order()
