@@ -82,7 +82,7 @@ edit_order_items = function(item_id, orderN){
 }
 #confirm order
 confirm_order <- function(){
-    order_c = readline(prompt= '\n 1 = Add order \n3 = Remove item  \nC = Cancel  \n4 = Proceded to checkout: ')
+    order_c = readline(prompt= '\n1 = Add order \n3 = Remove item  \nC = Cancel  \n4 = Proceded to checkout: ')
 
     if (order_c == '1'){
         make_order()
