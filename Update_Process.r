@@ -91,6 +91,7 @@ confirm_order <- function(){
         add_order()
     } else if (order_c == 'C') {
         delete_order()
+
 }  else {
     print('invalid option')
     add_order()
