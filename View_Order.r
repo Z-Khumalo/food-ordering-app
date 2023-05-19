@@ -1,26 +1,47 @@
+library(DBI)
 library(RPostgres)
 source("con.R")
-library(DBI)
 
-get_order_info <- function(order_id){
-  # Establish connection to database
-  #conn <- odbcDriverConnect(conn)
-  
-  # Construct SQL query to retrieve order information
-  sql <- paste("SELECT Orders.Order_id, Orders.Order_date, Menu.item_name, Orders.Order_quantity, SUM(Menu.Item_price) AS total_sales
-                FROM Orders
-                INNER JOIN Menu ON Orders.Item_id = Menu.Item_id
-                GROUP BY Orders.Order_id, Orders.Order_date, Orders.Order_quantity, Menu.Item_id, Menu.item_name")
+#Function to view an order by order ID
+view_order <- function() {
+  while (TRUE) {
+    # Prompt the user to enter the order ID
+    order_id <- readline(prompt = "Enter the Order ID to view (or 'q' to quit): ")
 
+#Check if the user wants to quit
+    if (tolower(order_id) == "q") {
+      break
+    }
 
-  
-  # Execute query and store results in a data frame
-  result <- dbGetQuery(conn, sql)
-  
-  # Close database connection
-  #$odbcClose(conn)
-  
-  # Return result
-  return(result)
+#Construct the SELECT query
+    select_query <- paste0("SELECT * FROM final_orders WHERE Order_id = ", order_id)
+
+#Execute the SELECT query
+    order_data <- dbGetQuery(con, select_query)
+
+#Check if any rows were returned
+    if (nrow(order_data) > 0) {
+      # Order found, print the order details
+      print(order_data)
+    } else {
+      # Order not found, print error message
+      cat("Error: Order not found.\n")
+    }
+
+#Ask the user if they want to view another order
+    repeat {
+      choice <- readline(prompt = "Do you want to view another order? (Y/N): ")
+      if (tolower(choice) %in% c("y", "n")) {
+        break
+      }
+      cat("Invalid choice. Please enter 'Y' or 'N'.\n")
+    }
+
+    if (tolower(choice) == "n") {
+      break
+    }
+  }
 }
- print(get_order_info())
+
+#Call the view_order function
+view_order()
