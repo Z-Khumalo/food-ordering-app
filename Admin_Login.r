@@ -21,7 +21,7 @@ while (TRUE) {
   
   
   # Construct SQL query to check credentials against database
-  sql <- paste0("SELECT * FROM Administrator WHERE Admin_user_name = '",
+  sql <- paste0("SELECT * FROM Administrator WHERE Admin_name = '",
                 creds$username, "' AND Admin_password = '", creds$password, "'")
                 
                 
