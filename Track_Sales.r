@@ -1,26 +1,25 @@
-library(RPostgres)
-source("con.R")
 library(DBI)
+library(RPostgreSQL)
+source("con.R")
 
 track_sales <- function(order_id){
   # Establish connection to database
   #conn <- odbcDriverConnect(conn)
 
   # Construct SQL query to track the sales
-  sql <- paste("SELECT b.Item_category, b.Item_name, sum(cast(a.Order_quantity as integer)) as Quantity_Sold, sum(cast(a.Order_total as decimal)) AS total_sales
-                FROM Orders a LEFT JOIN Menu b ON a.Item_id = b.Item_id
-
-
-                GROUP BY b.Item_category,b.Item_name")
+  sql <- paste("SELECT Item_category, Item_name, sum(Order_quantity) as Quantity_Sold, sum(Order_total) AS total_sales
+                FROM final_orders
+                GROUP BY Item_category,Item_name")
 
 
   #Execute query and store results in a data frame
-  result <- dbGetQuery(conn, sql)
+  result <- dbGetQuery(con, sql)
 
   # Close database connection
   #$odbcClose(conn)
 
   # Return result
-  return(result)
+  print(result)
 }
- print(track_sales())
+track_sales()
+
