@@ -69,14 +69,15 @@ fetch_orders <- function() {
 
     confirm_order()
 }
-edit_order_items = function(item_id, orderN){
+edit_order_items = function(){
     
     item_id = readline(prompt = 'Enter item id: ')
+    new_itemId = readline(prompt = "Enter new item ID: ")
     orderN = readline(prompt =  "Enter order #: ")
 
     query = paste("UPDATE orders 
-            SET item_id =", item_id, 
-            "WHERE order_number = ", orderN)
+            SET item_id =", new_itemId, 
+            "WHERE order_number = ", orderN, "and item_id =", item_id)
 
     dbSendQuery(conn,query)
 }
@@ -91,7 +92,6 @@ confirm_order <- function(){
         add_order()
     } else if (order_c == 'C') {
         delete_order()
-
 }  else {
     print('invalid option')
     add_order()
