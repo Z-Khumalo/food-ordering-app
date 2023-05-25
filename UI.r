@@ -2,50 +2,113 @@ library(shiny)
 library(DBI)
 library(RPostgreSQL)
 source("con.R")
-source("Admin_Login.r")
+
 
 # Define the UI
+# UI
 ui <- fluidPage(
   titlePanel("Food Ordering App"),
   sidebarLayout(
     sidebarPanel(
-      actionButton("viewOrderBtn", "View Order"),
-      textInput("orderIdInput", "Order ID:"),
-      br(),
-      textInput("updateItemIdInput", "Item ID to Update:"),
+      textInput("username", "Username:"),
+      passwordInput("password", "Password:"),
+      actionButton("login", "Login")
+      
+    ),
+    
+    mainPanel(
+      conditionalPanel(
+        condition = "!input.login",
+        h4("Please login to access the system.")
+      ),
+      conditionalPanel(
+        condition = "input.login == 1",
+        tableOutput("orderTableDetails"),
+        tabsetPanel(
+          id = "main_tabs",
+          tabPanel("Add Order",
+                   h4("ADD ORDER"),
+                   textInput("itemIdInput", "Item ID"),
+      numericInput("quantityInput", "Quantity:", value = 1, min = 1),
+      dataTableOutput("order_data"),
+      actionButton("addToOrderBtn", "Add to Order"),
+      
+                   actionButton("finishOrderBtn", "Submit Order"),
+                    verbatimTextOutput("orderSummary"),
+                    
+                    tableOutput("menuTable")),
+
+          tabPanel("Update Order",
+        textInput("updateItemIdInput", "Item ID to Update:"),
       numericInput("updateQuantityInput", "New Quantity:", value = 1, min = 1),
       actionButton("updateQuantityBtn", "Update Quantity"),
-      br(),
+                  ),
+
+          tabPanel("Delete Order",
+                   h4("Delete Order"),
+                         
       textInput("deleteItemIdInput", "Item ID to Delete:"),
       actionButton("deleteItemBtn", "Delete Item"),
-      br(),
-      actionButton("deleteOrderBtn", "Delete Whole Order"),
-      br(),
-      dateInput("salesDateInput", "Sales Date:")
-    ),
-    mainPanel(
-      h3("Food Menu"),
-      tableOutput("menuTable"),
-      br(),
-      textInput("itemIdInput", "Item ID:"),
-      numericInput("quantityInput", "Quantity:", value = 1, min = 1),
-      actionButton("addToOrderBtn", "Add to Order"),
-      br(),
-      verbatimTextOutput("orderSummary"),
-      actionButton("finishOrderBtn", "Finish Order"),
-      actionButton("backToMenuBtn", "Back to Main Menu"),
-      br(),
-      h4("Order Details"),
-      tableOutput("orderTableDetails"),
-      br(),
-      h4("Sales Summary"),
-      tableOutput("salesTable")
+      actionButton("deleteOrderBtn", "Delete Whole Order")
+                   
+          ),
+
+          tabPanel("View/Track Orders", 
+          h4("View Orders"),
+          textInput("orderIdInput", "Order ID:"),
+          actionButton("viewOrderBtn", "View Order"),
+
+          tableOutput("order_items"),
+          actionButton("finishOrderBtn", "Finish Order"),
+      ),
+
+          tabPanel("View/Track Sales",tableOutput("salesTable"),
+                    dateInput("salesDateInput", "Sales Date:")
+                  
+          )
+        )
+      )
     )
   )
 )
 
+
+
 # Define the server
 server <- function(input, output, session) {
+
+  # Track the login status
+  loggedIn <- reactiveVal(FALSE)
+  
+  # Login function
+  observeEvent(input$login, {
+    username <- isolate(input$username)
+    password <- isolate(input$password)
+    
+    # Construct SQL query to check credentials against the database
+    sql <- paste0("SELECT * FROM Administrator WHERE Admin_name = '",
+                  username, "' AND Admin_password = '", password, "'")
+    
+    res <- dbGetQuery(con, sql)
+    
+    if (nrow(res) != 1) {
+      # Failed login
+      showModal(modalDialog(
+        title = "Login failed",
+        "Login unsuccessful.",
+        footer = modalButton("OK", onclick = "$('#login').hide();")
+      ))
+    } else {
+      # Successful login
+      loggedIn(TRUE)
+      showModal(modalDialog(
+        title = "Login Successful",
+        "You have successfully logged in.",
+        footer = modalButton("OK")
+      ))
+    }
+  })
+
   # Create reactive values to store the order details
   order_data <- reactiveValues(
     items = data.frame(
@@ -63,45 +126,9 @@ server <- function(input, output, session) {
     current_order_id = 0
   )
 
-  # Populate the category select input
-  observe({
-    query <- "SELECT DISTINCT category FROM Menu"
-    categories <- dbGetQuery(con, query)
-    updateSelectInput(session, "categoryInput", choices = categories$category)
-  })
-
-  # Filter the menu based on the selected category
-  observeEvent(input$filterMenuBtn, {
-    selected_category <- input$categoryInput
-
-    if (is.null(selected_category)) {
-      return()
-    }
-
-    query <- paste0("SELECT Item_id, Item_name, Item_price, Item_category FROM Menu WHERE item_category = '", selected_category, "'")
-    filtered_menu <- dbGetQuery(con, query)
-    output$menuTable <- renderTable(filtered_menu)
-  })
-
-  # Clear the category filter and show the entire menu
-  observeEvent(input$clearFilterBtn, {
-    output$menuTable <- renderTable({
-      query <- "SELECT Item_id, Item_name, Item_price, Item_category FROM Menu"
-      menu_items <- dbGetQuery(con, query)
-      menu_items
-    })
-  })
-
-
-
   # Display the food menu table
-#   output$menuTable <- renderTable({
-#     query <- "SELECT Item_id, Item_name, Item_price, Item_category FROM Menu"
-#     menu_items <- dbGetQuery(con, query)
-#     menu_items
-#   })
-output$menuTable <- renderTable({
-    query <- "SELECT Item_id, Item_name, Item_price, Item_category FROM Menu ORDER BY Item_category"
+  output$menuTable <- renderTable({
+    query <- "SELECT Item_id, Item_name, Item_price FROM Menu"
     menu_items <- dbGetQuery(con, query)
     menu_items
   })
@@ -132,7 +159,7 @@ output$menuTable <- renderTable({
       return()
     }
 
-    admin_name <- creds$username
+    admin_name <-isolate(input$username)
     order_date <- format(Sys.time(), "%Y-%m-%d %H:%M:%S")
 
     get_price_query <- paste0("SELECT * FROM Menu WHERE Item_id=", item_id)
@@ -175,6 +202,9 @@ output$menuTable <- renderTable({
 
     # Update the database table with the new item
     dbWriteTable(con, "final_orders", new_item, append = TRUE, row.names = FALSE)
+
+      updateTextInput(session, "itemIdInput", value = "")
+      updateNumericInput(session, "quantityInput", value = 1)
   })
 
   # Finish the order
@@ -185,9 +215,12 @@ output$menuTable <- renderTable({
     }
 
     # Perform any necessary actions for finishing the order
-    # ...
+        showModal(modalDialog(
+        title = "Order placed.",
+        "Order finished successfully!",
+        footer = modalButton("OK")
+      ))
 
-    cat("Order finished successfully.\n")
 
     # Reset the current order ID
     order_data$current_order_id <- 0
@@ -274,6 +307,13 @@ output$menuTable <- renderTable({
     order_data$items <- order_data$items[-item_index, ]
 
     dbExecute(con, paste0("DELETE FROM final_orders WHERE order_id = ", order_data$current_order_id, " AND item_id = ", item_id))
+          showModal(modalDialog(
+        title = "Item removed from order.",
+        "Item removed successfully!",
+        footer = modalButton("OK")
+      ))
+
+
   })
 
   # Delete item
@@ -329,7 +369,11 @@ output$menuTable <- renderTable({
     order_data$items
   })
 
-
+  output$order_info <- renderDataTable({
+    # Query the food menu from the database
+    order_info <- dbGetQuery(con, "SELECT * FROM final_orders")
+    order_info
+  })
 
 
 # Display the order summary
@@ -345,7 +389,7 @@ output$orderSummary <- renderPrint({
 
   # Calculate the total price by summing the order_total column
   order_total <- sum(order_data$items$order_total)
-  cat("Total Price: $", order_total, "\n")
+  cat("Total Price: R", order_total, "\n")
 })
 # # Track sales by date
 #   output$salesTable <- renderTable({
