@@ -1,9 +1,10 @@
-library(RPostgres)
+library(RPostgreSQL)
 
-
-conn <- dbConnect(
-Postgres(), 
-user <- '', 
-password ='', 
-dbname <- '', 
-host <- 'localhost')
+con <- dbConnect(
+  PostgreSQL(),
+  dbname = "food_db",
+  host = "localhost",
+  port = 5432,
+  user = "postgres",
+  password = " "
+)
